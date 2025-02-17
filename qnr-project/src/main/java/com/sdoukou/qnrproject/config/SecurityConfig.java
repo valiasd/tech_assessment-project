@@ -8,31 +8,31 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 public class SecurityConfig {
 
-    @Autowired
-    private CustomUserDetailsService customUserDetailsService;
+    private final CustomUserDetailsService customUserDetailsService;
 
-    // SecurityFilterChain for Spring Security 5.7+
+    public SecurityConfig(CustomUserDetailsService customUserDetailsService) {
+        this.customUserDetailsService = customUserDetailsService;
+    }
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.requireCsrfProtectionMatcher(new AntPathRequestMatcher("/login"))) // Enable CSRF for login
+                .csrf(csrf -> csrf.disable()) // Disable CSRF for simplicity
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/login", "/css/**", "/js/**").permitAll() // Allow access to login and static resources
-                        .anyRequest().authenticated()
+                        .anyRequest().authenticated() // Protect all other requests
                 )
                 .formLogin(form -> form
                         .loginPage("/login")
-                        .defaultSuccessUrl("/home")
+                        .defaultSuccessUrl("/dashboard", true) // Redirect to dashboard after login
                         .permitAll()
                 )
                 .logout(logout -> logout
-                        .logoutSuccessUrl("/login?logout")
+                        .logoutSuccessUrl("/login?logout") // Redirect to login page after logout
                         .permitAll()
                 );
         return http.build();
@@ -44,9 +44,9 @@ public class SecurityConfig {
         return http.getSharedObject(AuthenticationManager.class);
     }
 
-    // Password Encoder Bean (if you plan to use a proper password encoder, which is highly recommended)
+    // Password Encoder Bean (replace NoOpPasswordEncoder with BCryptPasswordEncoder for production)
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return NoOpPasswordEncoder.getInstance(); // You can replace this with BCryptPasswordEncoder for production
+        return NoOpPasswordEncoder.getInstance(); // Use BCryptPasswordEncoder in production for security
     }
 }

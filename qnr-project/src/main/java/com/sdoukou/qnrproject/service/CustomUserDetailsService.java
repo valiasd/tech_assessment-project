@@ -32,5 +32,10 @@ public class CustomUserDetailsService implements UserDetailsService {
                 new ArrayList<>() // No roles/authorities needed if you aren't using them
         );
     }
-}
 
+    // Add a method to fetch the User entity
+    public User findByUsernameEntity(String username) {
+        Optional<User> optionalUser = userRepository.findByUsername(username);
+        return optionalUser.orElseThrow(() -> new UsernameNotFoundException("User not found"));
+    }
+}

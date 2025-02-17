@@ -23,9 +23,13 @@
             <button type="submit">Login</button>
         </div>
     </form>
+
+    <!-- Display login error message -->
     <div th:if="${param.error}" class="error">
         Invalid username or password.
     </div>
+
+    <!-- Display logout message -->
     <div th:if="${param.logout}" class="logout">
         You have been logged out.
     </div>
