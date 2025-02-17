@@ -1,21 +1,20 @@
 package com.sdoukou.qnrproject.controller;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+
+import java.security.Principal;
 
 @Controller
 public class LoginController {
 
     @GetMapping("/login")
-    public String loginPage() {
-        return "login"; // Login page
+    public String login(Principal principal) {
+        return principal == null ? "login" : "redirect:/dashboard";
     }
 
-    @GetMapping("/dashboard")
-    public String dashboard(Model model) {
-        // This method would be handled by Spring Security after successful login
-        // Redirect the user to the proper dashboard view
-        return "redirect:/user-dashboard"; // Redirect to the user dashboard after login
+    @GetMapping("/")
+    public String root(Principal principal) {
+        return principal == null ? "login" : "redirect:/dashboard";
     }
 }

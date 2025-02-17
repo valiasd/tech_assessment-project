@@ -11,21 +11,18 @@ import java.math.BigDecimal;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrderItem extends BaseEntity {
+public class OrderItem extends AbstractEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "order_id", nullable = false)
     private Order order;
 
-    @Column(name = "item_name", nullable = false)
     private String itemName;
-
-    @Column(nullable = false)
-    private Integer quantity;
-
-    @Column(nullable = false)
+    private int quantity;
     private BigDecimal price;
-
-    @Column(nullable = false)
     private BigDecimal total;
 }
