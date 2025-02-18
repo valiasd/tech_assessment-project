@@ -16,7 +16,7 @@ import static org.springframework.security.config.Customizer.withDefaults;
 
 @EnableWebSecurity
 @Configuration
-public class SecurityConfig {
+public class SecurityConfig{
 
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
@@ -30,7 +30,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .cors(cors -> cors
                         .configurationSource(corsConfigurationSource())
@@ -40,15 +40,12 @@ public class SecurityConfig {
                         .requestMatchers("/styles/**").permitAll()
                         .requestMatchers("/img/**").permitAll()
                         .requestMatchers("/login").permitAll()
-                        .requestMatchers("/dashboard").permitAll()
+                        .requestMatchers("/dashboard").authenticated() // Restrict to authenticated users
                         .anyRequest().authenticated()
                 )
                 .formLogin(formLogin -> formLogin
                         .loginPage("/login")
-                        .defaultSuccessUrl("/dashboard")
-                        // .usernameParameter("username")
-                        // .passwordParameter("password")
-                        // .failureUrl("/login?error")
+                        .defaultSuccessUrl("/dashboard", true)
                 )
                 .httpBasic(withDefaults())
                 .logout(logout -> logout

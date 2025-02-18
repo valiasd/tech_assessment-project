@@ -1,12 +1,13 @@
 package com.sdoukou.qnrproject.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore; // Add this import
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Getter
@@ -18,15 +19,18 @@ public class User extends AbstractEntity implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "user_id")
+    private Long userId;
 
     private String username;
     private String password;
 
     @OneToOne(mappedBy = "user")
+    @JsonIgnore
     private Customer customer;
 
-
+    @OneToMany(mappedBy = "user")
+    private List<Order> orders;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -66,7 +70,7 @@ public class User extends AbstractEntity implements UserDetails {
     @Override
     public String toString() {
         return "User{" +
-                "id=" + id +
+                "id=" + userId +
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 '}';

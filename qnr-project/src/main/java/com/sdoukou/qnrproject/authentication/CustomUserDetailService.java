@@ -15,7 +15,11 @@ public class CustomUserDetailService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User with username" + username + "not found." ));
+        // Retrieve your custom User object from the database
+        com.sdoukou.qnrproject.model.User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User with username " + username + " not found"));
+
+        // Return the custom UserDetails implementation
+        return new CustomUserDetails(user);
     }
 }

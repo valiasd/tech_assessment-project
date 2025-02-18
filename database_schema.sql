@@ -1,62 +1,81 @@
-create database qnrprojectdb;
-use qnrprojectdb;
-
-create table users (
-    user_id bigint auto_increment primary key,
-    username varchar(50) unique not null,
-    password varchar(255) not null,
-    email varchar(50) unique not null
+CREATE TABLE users (
+    user_id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(50) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    email VARCHAR(50) UNIQUE NOT NULL, 
+    created_at timestamp default current_timestamp
 );
 
-create table orders (
-    order_id bigint auto_increment primary key,
-    user_id bigint references users(user_id) on delete cascade,
-    order_date timestamp default current_timestamp,
-    total_amount decimal(10, 2) not null default 0.00
+CREATE TABLE customers (
+    customer_id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    firstname VARCHAR(50) NOT NULL,
+    lastname VARCHAR(255) NOT NULL,
+    user_id BIGINT NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,  
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
 );
 
-create table order_items (
-    id bigint auto_increment primary key,
-    order_id bigint references orders(order_id) on delete cascade,
-    item_name varchar(100) not null,
-    quantity int not null,
-    price decimal(10, 2) not null,
-    total decimal(10, 2) not null default 0.00
+CREATE TABLE orders (
+    order_id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    user_id BIGINT NOT NULL,
+    order_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    total_amount DECIMAL(10, 2) NOT NULL DEFAULT 0.00,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,  
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
+);
+
+CREATE TABLE order_items (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    order_id BIGINT NOT NULL,
+    item_name VARCHAR(100) NOT NULL,
+    quantity INT NOT NULL,
+    price DECIMAL(10, 2) NOT NULL,
+    total DECIMAL(10, 2) NOT NULL DEFAULT 0.00,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,  
+    FOREIGN KEY (order_id) REFERENCES orders(order_id) ON DELETE CASCADE
 );
 
 -- Trigger function to calculate the total for each item in 'order_items'
-delimiter $$
-create trigger calculate_item_total before insert on order_items
-for each row
-begin
-    set new.total = new.quantity * new.price;
-end $$
-delimiter ;
+DELIMITER $$
+CREATE TRIGGER calculate_item_total BEFORE INSERT ON order_items
+FOR EACH ROW
+BEGIN
+    SET NEW.total = NEW.quantity * NEW.price;
+END $$
+
+DELIMITER ;
 
 -- Trigger function to calculate the total amount of an order in 'orders'
-delimiter $$
-create trigger calculate_order_total after insert on order_items
-for each row
-begin
-    update orders
-    set total_amount = (select coalesce(sum(total), 0) from order_items where order_id = new.order_id)
-    where order_id = new.order_id;
-end $$
-delimiter ;
+DELIMITER $$
+CREATE TRIGGER calculate_order_total AFTER INSERT ON order_items
+FOR EACH ROW
+BEGIN
+    UPDATE orders
+    SET total_amount = (SELECT COALESCE(SUM(total), 0) FROM order_items WHERE order_id = NEW.order_id)
+    WHERE order_id = NEW.order_id;
+END $$
 
-insert into users (username, password, email) values
+DELIMITER ;
+
+INSERT INTO users (username, password, email) VALUES
 ('valia', '1234', 'valia1@example.com'),
 ('evangelia', '2345', 'evangelia@example.com'),
 ('sdoukou', '3456', 'sdoukou@example.com');
 
-insert into orders (user_id) values
-(1),
-(2),
-(3);
+INSERT INTO customers (firstname, lastname, user_id, created_at) VALUES
+('Valia', 'Sdoukou', 1, NOW()),
+('Evangelia', 'Sdoukou', 2, NOW()),
+('Sdoukou', 'Sdoukou', 3, NOW());
 
-insert into order_items (order_id, item_name, quantity, price) values
-(1, 'Apples', 3, 2.50), 
-(1, 'Milk', 1, 1.80), 
-(2, 'Bananas', 2, 1.20), 
-(2, 'Bread', 1, 2.00), 
-(3, 'Eggs', 2, 3.50);
+INSERT INTO orders (user_id, created_at) VALUES
+(1, NOW()),
+(2, NOW()),
+(3, NOW());
+
+INSERT INTO order_items (order_id, item_name, quantity, price, created_at) VALUES
+(1, 'Apples', 3, 2.50, NOW()), 
+(1, 'Milk', 1, 1.80, NOW()), 
+(2, 'Bananas', 2, 1.20, NOW()), 
+(2, 'Bread', 1, 2.00, NOW()), 
+(3, 'Eggs', 2, 3.50, NOW());
+

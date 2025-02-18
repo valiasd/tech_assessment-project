@@ -1,31 +1,29 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
     <title>Dashboard</title>
-    <link rel="stylesheet" href="../styles/styles.css">
 </head>
-
 <body>
-    <h2>Welcome, <span th:text="${username}"></span>!</h2>
-    <h3>Order Details</h3>
-    <table>
-        <thead>
-        <tr>
-            <th>Order ID</th>
-            <th>Order Date</th>
-            <th>Total Amount</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="order : ${orders}">
-            <td th:text="${order.orderId}"></td>
-            <td th:text="${order.orderDate}"></td>
-            <td th:text="${order.totalAmount}"></td>
-        </tr>
-        </tbody>
-    </table>
-   <a href="/logout">Logout</a>
-
+<h1>Welcome, <span th:text="${username}"></span>!</h1>
+<h2>Order Details</h2>
+<table>
+    <thead>
+    <tr>
+        <th>Order ID</th>
+        <th>Order Date</th>
+        <th>Total Amount</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="order : ${orders}">
+        <td th:text="${order.id}"></td>
+        <td th:text="${order.orderDate}"></td>
+        <td th:text="${order.totalAmount}"></td>
+    </tr>
+    </tbody>
+</table>
+<form th:action="@{/logout}" method="post">
+    <button type="submit">Logout</button>
+</form>
 </body>
 </html>

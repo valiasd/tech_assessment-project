@@ -17,6 +17,7 @@ public class Order extends AbstractEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "order_id") // Match the database column name
     private Long orderId;
 
     @ManyToOne
@@ -30,4 +31,3 @@ public class Order extends AbstractEntity {
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderItem> orderItems;
 }
-
