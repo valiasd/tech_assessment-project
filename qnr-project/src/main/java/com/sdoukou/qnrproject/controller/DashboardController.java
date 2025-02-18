@@ -2,15 +2,13 @@ package com.sdoukou.qnrproject.controller;
 
 import com.sdoukou.qnrproject.model.Order;
 import com.sdoukou.qnrproject.service.OrderService;
+import com.sdoukou.qnrproject.authentication.CustomUserDetails;  // Add this import
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import com.sdoukou.qnrproject.authentication.CustomUserDetails;  // Import CustomUserDetails
 
 import java.util.List;
 
@@ -23,12 +21,11 @@ public class DashboardController {
 
     @GetMapping
     public String dashboard(@AuthenticationPrincipal CustomUserDetails customUserDetails, Model model) {
-        com.sdoukou.qnrproject.model.User user = customUserDetails.getUser();
-        List<Order> orders = orderService.getOrdersByUser(user);
+        List<Order> orders = orderService.getOrdersByUser(customUserDetails.getUser()); // Use CustomUserDetails
 
-        model.addAttribute("user", user);
+        model.addAttribute("username", customUserDetails.getUsername()); 
         model.addAttribute("orders", orders);
 
-        return "dashboard";
+        return "dashboard"; // Return view
     }
 }
