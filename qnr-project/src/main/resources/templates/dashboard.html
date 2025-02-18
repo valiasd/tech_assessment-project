@@ -9,7 +9,11 @@
 <body>
 
 <div>
+<<<<<<< HEAD
     <h1>Welcome, <span th:text="${username}"></span>!</h1>
+=======
+    <h1>Welcome, <span th:text="${username}">Username</span>!</h1>
+>>>>>>> acfa092 (Fixed dashboard issue and re-added logout button)
 </div>
 
 <h2>Your Orders</h2>
@@ -23,12 +27,25 @@
     </thead>
     <tbody>
     <tr th:each="order : ${orders}">
+<<<<<<< HEAD
         <td th:text="${order.id}"></td>
         <td th:text="${order.date}"></td>
         <td th:text="${order.total}"></td>
+=======
+        <td th:text="${order.orderId}"></td>
+        <td th:text="${order.orderDate}"></td>
+        <td th:text="${order.totalAmount}"></td>
+>>>>>>> acfa092 (Fixed dashboard issue and re-added logout button)
     </tr>
     </tbody>
+
 </table>
+<<<<<<< HEAD
+=======
+<form th:action="@{/logout}" method="post">
+    <button type="submit">Logout</button>
+</form>
+>>>>>>> acfa092 (Fixed dashboard issue and re-added logout button)
 
 </body>
 </html>

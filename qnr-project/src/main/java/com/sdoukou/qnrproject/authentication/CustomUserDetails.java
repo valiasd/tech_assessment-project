@@ -11,7 +11,7 @@ public class CustomUserDetails implements UserDetails {
     private final User user; // Your custom User class
 
     public CustomUserDetails(User user) {
-        this.user = user; // Store the actual user object
+        this.user = user;
     }
 
     @Override
@@ -22,35 +22,35 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public String getPassword() {
-        return user.getPassword(); // Return password from your custom User object
+        return user.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return user.getUsername(); // Return username from your custom User object
+        return user.getUsername();
     }
 
     @Override
     public boolean isAccountNonExpired() {
-        return true; // Assuming the account is non-expired
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return true; // Assuming the account is not locked
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return true; // Assuming credentials are not expired
+        return true;
     }
 
     @Override
     public boolean isEnabled() {
-        return true; // Assuming the account is enabled
+        return true;
     }
 
     public User getUser() {
-        return user; // Return the custom User object
+        return user;
     }
 }

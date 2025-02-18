@@ -19,7 +19,6 @@ public class CustomUserDetailService implements UserDetailsService {
         com.sdoukou.qnrproject.model.User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User with username " + username + " not found"));
 
-        // Return the custom UserDetails implementation
         return new CustomUserDetails(user);
     }
 }

@@ -17,7 +17,7 @@ public class Order extends AbstractEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "order_id") // Match the database column name
+    @Column(name = "order_id")
     private Long orderId;
 
     @ManyToOne
