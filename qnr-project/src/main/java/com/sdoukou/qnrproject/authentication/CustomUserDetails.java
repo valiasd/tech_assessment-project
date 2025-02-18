@@ -1,6 +1,6 @@
 package com.sdoukou.qnrproject.authentication;
 
-import com.sdoukou.qnrproject.model.User; // Your custom User class
+import com.sdoukou.qnrproject.model.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 public class CustomUserDetails implements UserDetails {
-    private final User user; // Your custom User class
+    private final User user;
 
     public CustomUserDetails(User user) {
         this.user = user;

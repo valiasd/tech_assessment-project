@@ -40,7 +40,7 @@ public class SecurityConfig{
                         .requestMatchers("/styles/**").permitAll()
                         .requestMatchers("/img/**").permitAll()
                         .requestMatchers("/login").permitAll()
-                        .requestMatchers("/dashboard").authenticated() // Restrict to authenticated users
+                        .requestMatchers("/dashboard").authenticated()
                         .anyRequest().authenticated()
                 )
                 .formLogin(formLogin -> formLogin

@@ -21,18 +21,13 @@ public class DashboardController {
 
     @GetMapping
     public String dashboard(@AuthenticationPrincipal CustomUserDetails customUserDetails, Model model) {
-<<<<<<< HEAD
-        List<Order> orders = orderService.getOrdersByUser(customUserDetails.getUser()); // Use CustomUserDetails
-
-=======
         System.out.println("Logged in user: " + customUserDetails.getUsername());
 
         List<Order> orders = orderService.getOrdersByUser(customUserDetails.getUser());
 
->>>>>>> acfa092 (Fixed dashboard issue and re-added logout button)
-        model.addAttribute("username", customUserDetails.getUsername()); 
+        model.addAttribute("username", customUserDetails.getUsername());
         model.addAttribute("orders", orders);
 
-        return "dashboard"; // Return view
+        return "dashboard";
     }
 }

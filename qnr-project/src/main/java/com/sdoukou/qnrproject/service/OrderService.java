@@ -14,9 +14,7 @@ public class OrderService {
 
     private final OrderRepository orderRepository;
 
-    // Optimized method to fetch orders by user
     public List<Order> getOrdersByUser(User user) {
-        // Fetch orders by the user once, avoid calling repository twice
         List<Order> orders = orderRepository.findByUser(user);
         System.out.println("Orders fetched: " + orders);
         return orders;
